@@ -1,0 +1,24 @@
+baseURL: "/"
+title: "Ferramentas · Projeto Vertentes"
+locale: "pt-br"
+defaultContentLanguage: "pt-br"
+
+# Não precisamos de RSS nem de páginas de taxonomia neste portfólio
+disableKinds: ["taxonomy", "term", "rss"]
+
+# Padrão recomendado pelo blogdown
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true   # permite HTML dentro dos .md
+
+params:
+  projeto: "Projeto Vertentes"
+  subtitulo: "Consórcios de Paisagem de Uso Múltiplo Sustentável no Brasil"
+  descricao: "Portfólio de ferramentas, aplicativos e mapas interativos desenvolvidos pela equipe do Projeto Vertentes."
+  rodape: "Projeto Vertentes · GEF-7 / FOLUR"
+  contato: ""          # e-mail ou link de contato exibido no rodapé (opcional)
+  repo: ""             # URL do repositório deste site no GitHub (opcional)
+  noindex: true        # true = pede aos buscadores para não indexar o site

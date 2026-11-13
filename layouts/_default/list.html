@@ -1,0 +1,9 @@
+{{ define "main" }}
+<header class="hero hero--small">
+  <div class="wrap hero__inner">
+    <p class="kicker"><a href="{{ "/" | relURL }}">← Início</a></p>
+    <h1>{{ .Title }}</h1>
+  </div>
+</header>
+{{ partial "grid.html" . }}
+{{ end }}

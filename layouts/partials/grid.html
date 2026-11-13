@@ -1,0 +1,50 @@
+{{- $tools := (where site.RegularPages "Section" "ferramentas").ByWeight -}}
+{{- $tipos := slice -}}
+{{- range $tools }}{{ with .Params.tipo }}{{ $tipos = $tipos | append . }}{{ end }}{{ end -}}
+{{- $tipos = $tipos | uniq | sort -}}
+
+<section class="wrap catalog" id="ferramentas">
+  <div class="toolbar">
+    <div class="filters" role="group" aria-label="Filtrar por tipo">
+      <button class="chip is-active" data-filtro="*">Todas <span>{{ len $tools }}</span></button>
+      {{- range $tipos }}
+      <button class="chip" data-filtro="{{ . }}">{{ . }} <span>{{ len (where $tools "Params.tipo" .) }}</span></button>
+      {{- end }}
+    </div>
+    <label class="search">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="m14 14 4 4"/></svg>
+      <input type="search" id="busca" placeholder="Buscar ferramenta…" aria-label="Buscar ferramenta">
+    </label>
+  </div>
+
+  <div class="grid">
+    {{ range $tools }}{{ partial "card.html" . }}{{ end }}
+  </div>
+  <p class="empty" hidden>Nenhuma ferramenta encontrada com esse filtro.</p>
+</section>
+
+<script>
+(function () {
+  var cards = document.querySelectorAll('.card');
+  var chips = document.querySelectorAll('.chip');
+  var busca = document.getElementById('busca');
+  var empty = document.querySelector('.empty');
+  var tipo = '*';
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function aplicar() {
+    var q = norm(busca.value.trim()), n = 0;
+    cards.forEach(function (c) {
+      var ok = (tipo === '*' || c.dataset.tipo === tipo) && (!q || norm(c.dataset.busca).indexOf(q) > -1);
+      c.hidden = !ok; if (ok) n++;
+    });
+    empty.hidden = n > 0;
+  }
+  chips.forEach(function (b) {
+    b.addEventListener('click', function () {
+      chips.forEach(function (x) { x.classList.remove('is-active'); });
+      b.classList.add('is-active'); tipo = b.dataset.filtro; aplicar();
+    });
+  });
+  busca.addEventListener('input', aplicar);
+})();
+</script>

@@ -1,0 +1,36 @@
+{{ define "main" }}
+{{- $status := dict "producao" "Em produção" "desenvolvimento" "Em desenvolvimento" "prototipo" "Protótipo" -}}
+{{- $s := .Params.status | default "producao" -}}
+{{- $img := .Params.image | default "img/ferramentas/padrao.svg" -}}
+<article class="wrap tool">
+  <p class="kicker"><a href="{{ "/" | relURL }}">← Todas as ferramentas</a></p>
+
+  <div class="tool__head">
+    <div>
+      <div class="status status--{{ $s }}">{{ index $status $s | default $s }}</div>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.summary }}<p class="tool__summary">{{ . }}</p>{{ end }}
+      <div class="tool__actions">
+        {{ with .Params.tool_url }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">Abrir ferramenta ↗</a>{{ end }}
+        {{ with .Params.repo_url }}<a class="btn btn--ghost" href="{{ . }}" target="_blank" rel="noopener">Código-fonte</a>{{ end }}
+      </div>
+    </div>
+    <a class="tool__media" href="{{ .Params.tool_url | default "#" }}" target="_blank" rel="noopener">
+      <img src="{{ $img | relURL }}" alt="Tela de {{ .Title }}">
+    </a>
+  </div>
+
+  <div class="tool__cols">
+    <div class="prose">{{ .Content }}</div>
+    <aside class="facts">
+      <dl>
+        {{ with .Params.tipo }}<div><dt>Tipo</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.acesso }}<div><dt>Acesso</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.autor }}<div><dt>Responsável</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ if not .Date.IsZero }}<div><dt>Última atualização</dt><dd>{{ .Date | time.Format "2 de January de 2006" }}</dd></div>{{ end }}
+        {{ with .Params.tags }}<div><dt>Temas</dt><dd><ul class="tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul></dd></div>{{ end }}
+      </dl>
+    </aside>
+  </div>
+</article>
+{{ end }}

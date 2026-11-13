@@ -1,0 +1,29 @@
+{{- $status := dict
+    "producao"        "Em produção"
+    "desenvolvimento" "Em desenvolvimento"
+    "prototipo"       "Protótipo" -}}
+{{- $s := .Params.status | default "producao" -}}
+{{- $img := .Params.image | default "img/ferramentas/padrao.svg" -}}
+{{- $url := .Params.tool_url | default .RelPermalink -}}
+<article class="card"
+         data-tipo="{{ .Params.tipo }}"
+         data-busca="{{ lower (printf "%s %s %s %s" .Title (.Params.summary | default "") (delimit (.Params.tags | default slice) " ") (.Params.tipo | default "")) }}">
+  <a class="card__media" href="{{ $url }}" target="_blank" rel="noopener" aria-label="Abrir {{ .Title }}">
+    <img src="{{ $img | relURL }}" alt="Tela de {{ .Title }}" loading="lazy">
+    {{ with .Params.tipo }}<span class="badge">{{ . }}</span>{{ end }}
+    <span class="card__open">Abrir ferramenta <span aria-hidden="true">↗</span></span>
+  </a>
+  <div class="card__body">
+    <div class="status status--{{ $s }}">{{ index $status $s | default $s }}</div>
+    <h3 class="card__title"><a href="{{ $url }}" target="_blank" rel="noopener">{{ .Title }}</a></h3>
+    {{ with .Params.summary }}<p class="card__summary">{{ . }}</p>{{ end }}
+    {{ with .Params.tags }}
+    <ul class="tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+    {{ end }}
+  </div>
+  <dl class="card__meta">
+    {{ with .Params.acesso }}<div><dt>Acesso</dt><dd>{{ . }}</dd></div>{{ end }}
+    {{ if not .Date.IsZero }}<div><dt>Atualizado</dt><dd>{{ .Date | time.Format "Jan 2006" }}</dd></div>{{ end }}
+    <div class="card__details"><a href="{{ .RelPermalink }}">Detalhes →</a></div>
+  </dl>
+</article>

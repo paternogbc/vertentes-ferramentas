@@ -1,0 +1,16 @@
+{{ define "main" }}
+<header class="hero">
+  <svg class="hero__lines" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    {{ range seq 0 11 }}
+    <path d="M-50 {{ add 60 (mul . 34) }} C 200 {{ sub (add 60 (mul . 34)) (add 40 (mul . 9)) }}, 420 {{ add (add 60 (mul . 34)) (sub 70 (mul . 4)) }}, 640 {{ add 40 (mul . 34) }} S 1020 {{ sub (add 60 (mul . 34)) (add 20 (mul . 7)) }}, 1260 {{ add 80 (mul . 30) }}"/>
+    {{ end }}
+  </svg>
+  <div class="wrap hero__inner">
+    {{ with .Params.kicker }}<p class="kicker">{{ . }}</p>{{ end }}
+    <h1>{{ .Title }}</h1>
+    <div class="hero__lead">{{ .Content }}</div>
+  </div>
+</header>
+
+{{ partial "grid.html" . }}
+{{ end }}

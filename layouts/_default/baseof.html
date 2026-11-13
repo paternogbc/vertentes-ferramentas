@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Params.projeto }}{{ end }}</title>
+  <meta name="description" content="{{ with .Params.summary }}{{ . }}{{ else }}{{ site.Params.descricao }}{{ end }}">
+  {{ if site.Params.noindex }}<meta name="robots" content="noindex, nofollow">{{ end }}
+  <link rel="icon" type="image/svg+xml" href="{{ "img/favicon.svg" | relURL }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="{{ "/" | relURL }}">
+        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M2 23c5-9 9-9 14 0s9 9 14 0" /><path d="M2 16c5-9 9-9 14 0s9 9 14 0" /><path d="M2 9c5-9 9-9 14 0" opacity=".45"/>
+        </svg>
+        <span><strong>Vertentes</strong> <em>Ferramentas</em></span>
+      </a>
+      {{ with site.Params.repo }}<a class="topbar__link" href="{{ . }}" target="_blank" rel="noopener">GitHub ↗</a>{{ end }}
+    </div>
+  </nav>
+
+  <main>{{ block "main" . }}{{ end }}</main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <strong>{{ site.Params.rodape }}</strong><br>
+        <span>{{ site.Params.subtitulo }}</span>
+      </div>
+      <div class="footer__right">
+        {{ with site.Params.contato }}<a href="{{ if in . "@" }}mailto:{{ . }}{{ else }}{{ . }}{{ end }}">Contato</a>{{ end }}
+        <span>Atualizado em {{ now | time.Format "2 de January de 2006" }}</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
