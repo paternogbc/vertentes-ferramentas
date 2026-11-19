@@ -5,13 +5,15 @@
 {{- $s := .Params.status | default "producao" -}}
 {{- $img := .Params.image | default "img/ferramentas/padrao.svg" -}}
 {{- $url := .Params.tool_url | default .RelPermalink -}}
-<article class="card"
+{{- $ehBase := eq .Params.tipo "Base de dados" -}}
+{{- $rel := partial "relacionadas.html" . -}}
+<article class="card{{ if $ehBase }} card--base{{ end }}"
          data-tipo="{{ .Params.tipo }}"
          data-busca="{{ lower (printf "%s %s %s %s" .Title (.Params.summary | default "") (delimit (.Params.tags | default slice) " ") (.Params.tipo | default "")) }}">
   <a class="card__media" href="{{ $url }}" target="_blank" rel="noopener" aria-label="Abrir {{ .Title }}">
     <img src="{{ $img | relURL }}" alt="Tela de {{ .Title }}" loading="lazy">
     {{ with .Params.tipo }}<span class="badge">{{ . }}</span>{{ end }}
-    <span class="card__open">Abrir ferramenta <span aria-hidden="true">↗</span></span>
+    <span class="card__open">{{ if $ehBase }}Abrir planilha{{ else }}Abrir ferramenta{{ end }} <span aria-hidden="true">↗</span></span>
   </a>
   <div class="card__body">
     <div class="status status--{{ $s }}">{{ index $status $s | default $s }}</div>
@@ -20,8 +22,15 @@
     {{ with .Params.tags }}
     <ul class="tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
     {{ end }}
+    {{ with $rel }}
+    <p class="card__rel">
+      <span>{{ if $ehBase }}Alimenta{{ else }}Base de dados{{ end }}</span>
+      {{ range $i, $p := . }}{{ if $i }}, {{ end }}<a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>{{ end }}
+    </p>
+    {{ end }}
   </div>
   <dl class="card__meta">
+    {{ if $ehBase }}{{ with .Params.atualizacao }}<div><dt>Preenchimento</dt><dd>{{ . }}</dd></div>{{ end }}{{ end }}
     {{ with .Params.acesso }}<div><dt>Acesso</dt><dd>{{ . }}</dd></div>{{ end }}
     {{ if not .Date.IsZero }}<div><dt>Atualizado</dt><dd>{{ .Date | time.Format "Jan 2006" }}</dd></div>{{ end }}
     <div class="card__details"><a href="{{ .RelPermalink }}">Detalhes →</a></div>

@@ -201,3 +201,29 @@ a { color: var(--verde-2); text-underline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- Bases de dados ---------- */
+.card--base .badge { background: var(--ocre); color: #fff; }
+.card__rel { margin: 0 0 14px; font-size: .86rem; color: var(--tinta-2); }
+.card__rel span {
+  display: inline-block; margin-right: 6px; font-size: .68rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ocre);
+}
+.card__rel a { font-weight: 600; text-decoration: none; }
+.card__rel a:hover { text-decoration: underline; }
+
+.related { margin-top: 2.2em; }
+.related__list { display: grid; gap: 12px; }
+.related__item {
+  display: flex; gap: 16px; align-items: center; text-decoration: none; color: var(--tinta);
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: 12px; padding: 10px;
+  transition: box-shadow .2s, transform .2s;
+}
+.related__item:hover { box-shadow: var(--sombra-hover); transform: translateY(-2px); }
+.related__item img { width: 128px; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-radius: 8px; margin: 0; border: 0; flex: none; }
+.related__item span { display: flex; flex-direction: column; gap: 2px; }
+.related__item small { font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ocre); }
+.related__item strong { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; }
+.related__item em { font-style: normal; font-size: .9rem; color: var(--tinta-2); }
+.card__meta { flex-wrap: wrap; row-gap: 10px; }
+.card__meta dd, .card__details { white-space: nowrap; }

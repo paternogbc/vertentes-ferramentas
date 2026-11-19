@@ -1,0 +1,19 @@
+{{- /*
+  Liga bases de dados às ferramentas que usam essas bases.
+  - Numa base de dados: devolve as ferramentas listadas no campo `ferramentas`
+    (nomes dos arquivos .md, sem a extensão).
+  - Numa ferramenta: devolve as bases de dados que a citam no campo `ferramentas`.
+  Assim a ligação só precisa ser escrita uma vez, na base de dados.
+*/ -}}
+{{- $out := slice -}}
+{{- if eq .Params.tipo "Base de dados" -}}
+  {{- range .Params.ferramentas -}}
+    {{- with site.GetPage (printf "/ferramentas/%s" .) -}}{{- $out = $out | append . -}}{{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- $slug := .File.ContentBaseName -}}
+  {{- range where (where site.RegularPages "Section" "ferramentas") "Params.tipo" "Base de dados" -}}
+    {{- if in (.Params.ferramentas | default slice) $slug -}}{{- $out = $out | append . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

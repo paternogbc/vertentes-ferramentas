@@ -13,6 +13,10 @@
 #' @param tags    Vetor de palavras-chave
 #' @param imagem  Arquivo dentro de static/img/ferramentas/ (png, jpg, svg)
 #' @param repo    Link do código-fonte (opcional)
+#' @param atualizacao  Só para bases de dados: frequência de preenchimento ("Mensal", ...)
+#' @param formato      Só para bases de dados: "Excel (SharePoint IICA)", ...
+#' @param ferramentas  Só para bases de dados: nomes dos .md das ferramentas
+#'                     que usam a base (ex.: "cronograma")
 #'
 #' @examples
 #' nova_ferramenta(
@@ -23,6 +27,16 @@
 #'   tags   = c("restauração", "monitoramento"),
 #'   imagem = "painel-restauracao.png"
 #' )
+#'
+#' # Base de dados ligada a uma ferramenta
+#' nova_ferramenta(
+#'   titulo      = "Base · Indicadores",
+#'   url         = "https://iicaint.sharepoint.com/...",
+#'   tipo        = "Base de dados",
+#'   atualizacao = "Mensal",
+#'   formato     = "Excel (SharePoint IICA)",
+#'   ferramentas = c("painel-indicadores")
+#' )
 nova_ferramenta <- function(titulo,
                             url,
                             tipo = "Shiny app",
@@ -32,7 +46,10 @@ nova_ferramenta <- function(titulo,
                             acesso = "Equipe",
                             tags = character(),
                             imagem = "",
-                            repo = "") {
+                            repo = "",
+                            atualizacao = "",
+                            formato = "",
+                            ferramentas = character()) {
   status <- match.arg(status)
 
   slug <- iconv(titulo, to = "ASCII//TRANSLIT")
@@ -44,6 +61,7 @@ nova_ferramenta <- function(titulo,
 
   q <- function(x) paste0('"', gsub('"', '\\\\"', x), '"')
   tags_yaml <- if (length(tags)) paste0("[", paste(q(tags), collapse = ", "), "]") else "[]"
+  lista_yaml <- function(x) if (length(x)) paste0("[", paste(q(x), collapse = ", "), "]") else "[]"
   img <- if (nzchar(imagem)) paste0("img/ferramentas/", imagem) else ""
 
   linhas <- c(
@@ -54,6 +72,11 @@ nova_ferramenta <- function(titulo,
     paste0("repo_url: ", q(repo)),
     paste0("image: ", q(img)),
     paste0("tipo: ", q(tipo)),
+    if (tipo == "Base de dados") c(
+      paste0("formato: ", q(formato)),
+      paste0("atualizacao: ", q(atualizacao)),
+      paste0("ferramentas: ", lista_yaml(ferramentas))
+    ),
     paste0("status: ", q(status)),
     paste0("acesso: ", q(acesso)),
     paste0("autor: ", q(autor)),

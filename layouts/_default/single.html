@@ -2,6 +2,8 @@
 {{- $status := dict "producao" "Em produção" "desenvolvimento" "Em desenvolvimento" "prototipo" "Protótipo" -}}
 {{- $s := .Params.status | default "producao" -}}
 {{- $img := .Params.image | default "img/ferramentas/padrao.svg" -}}
+{{- $ehBase := eq .Params.tipo "Base de dados" -}}
+{{- $rel := partial "relacionadas.html" . -}}
 <article class="wrap tool">
   <p class="kicker"><a href="{{ "/" | relURL }}">← Todas as ferramentas</a></p>
 
@@ -11,7 +13,7 @@
       <h1>{{ .Title }}</h1>
       {{ with .Params.summary }}<p class="tool__summary">{{ . }}</p>{{ end }}
       <div class="tool__actions">
-        {{ with .Params.tool_url }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">Abrir ferramenta ↗</a>{{ end }}
+        {{ with .Params.tool_url }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">{{ if $ehBase }}Abrir planilha{{ else }}Abrir ferramenta{{ end }} ↗</a>{{ end }}
         {{ with .Params.repo_url }}<a class="btn btn--ghost" href="{{ . }}" target="_blank" rel="noopener">Código-fonte</a>{{ end }}
       </div>
     </div>
@@ -21,10 +23,32 @@
   </div>
 
   <div class="tool__cols">
-    <div class="prose">{{ .Content }}</div>
+    <div class="prose">
+      {{ .Content }}
+
+      {{ with $rel }}
+      <section class="related">
+        <h2>{{ if $ehBase }}Ferramentas que usam esta base{{ else }}Base de dados{{ end }}</h2>
+        <div class="related__list">
+          {{ range . }}
+          <a class="related__item" href="{{ .RelPermalink }}">
+            <img src="{{ (.Params.image | default "img/ferramentas/padrao.svg") | relURL }}" alt="">
+            <span>
+              <small>{{ .Params.tipo }}</small>
+              <strong>{{ .Title }}</strong>
+              {{ with .Params.summary }}<em>{{ . }}</em>{{ end }}
+            </span>
+          </a>
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+    </div>
     <aside class="facts">
       <dl>
         {{ with .Params.tipo }}<div><dt>Tipo</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.formato }}<div><dt>Formato</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.atualizacao }}<div><dt>Preenchimento</dt><dd>{{ . }}</dd></div>{{ end }}
         {{ with .Params.acesso }}<div><dt>Acesso</dt><dd>{{ . }}</dd></div>{{ end }}
         {{ with .Params.autor }}<div><dt>Responsável</dt><dd>{{ . }}</dd></div>{{ end }}
         {{ if not .Date.IsZero }}<div><dt>Última atualização</dt><dd>{{ .Date | time.Format "2 de January de 2006" }}</dd></div>{{ end }}
